@@ -12,7 +12,8 @@ router.patch("/updateemail", middleware.isAuthenticated, userController.updateEm
 router.put("/updateprofile", middleware.isAuthenticated, userController.updateProfile); //update profile nickname/bio
 router.get("/", middleware.isAuthenticated, userController.getUserInfo); //get profileInfo
 router.post("/logout", middleware.isAuthenticated, userController.logout); //logout
-router.patch("/updateprofpic", middleware.isAuthenticated, userController.updateProfile); //upload and update photo
+router.patch("/updateprofilepic", middleware.isAuthenticated, userController.updateProfilePic); //upload and update photo
+router.patch("/updatebgpic", middleware.isAuthenticated, userController.updateBgPic); //upload and update photo
 router.delete("/", middleware.isAuthenticated, userController.deleteUser); //delete user
 
 

@@ -106,11 +106,10 @@ const reorderLinks = async ({ userId, newOrder }) => {
       }
     });
     for(var i = 0; i < currentLinks.length; i++) {
-      console.log(currentLinks[i])
       currentLinks[i].order = newOrder[i]
-      currentLink.save()
+      currentLinks[i].save()
     } 
-    return links 
+    return currentLinks 
   }catch(err){
     console.log("Error -->", err);
     throw new Error(err);

@@ -154,15 +154,34 @@ const updatePassword = async (currUser, newPassword) => {
   }
 };
 
-const updatePhoto = async (currUser) => {
+const updateProfilePic = async (currUser, profilePic) => {
   try {
-    const result = await models.users.update(
+    const result = await models.usersprofiles.update(
       {
-        deletedAt: Sequelize.fn("now")
+        profilePic
       },
       {
         where: {
-          id: currUser.id,
+          userId: currUser.id,
+        },
+      }
+    );
+    return result;
+  } catch (e) {
+    console.error(e);
+    throw new Error(e);
+  }
+};
+
+const updateBgPic = async (currUser, bgPic) => {
+  try {
+    const result = await models.usersprofiles.update(
+      {
+        bgPic
+      },
+      {
+        where: {
+          userId: currUser.id,
         },
       }
     );
@@ -212,7 +231,8 @@ module.exports = {
   updateEmail,
   updateProfile,
   updatePassword,
-  updatePhoto,
+  updateProfilePic,
+  updateBgPic,
   deleteUser,
   logout
 };

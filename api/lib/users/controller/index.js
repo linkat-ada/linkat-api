@@ -40,7 +40,10 @@ const signin = async (req, res) => {
   try {
     const { usernameOrEmail, password } = req?.body;
     if (!usernameOrEmail || !password)
-      return responses.failedWithMessage("Please fill in the required fields.", res);
+      return responses.failedWithMessage(
+        "Please fill in the required fields.",
+        res
+      );
     const result = await service.signin({ usernameOrEmail, password });
     if (result) {
       return responses.success(
@@ -71,7 +74,7 @@ const updateUsername = async (req, res) => {
       return responses.successWithMessage("Username changed successfully", res);
     return responses.failedWithMessage("Failed to change username", res);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return responses.serverError(res);
   }
 };
@@ -91,7 +94,7 @@ const updateEmail = async (req, res) => {
       return responses.successWithMessage("Email changed successfully", res);
     return responses.failedWithMessage("Failed to change email", res);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return responses.serverError(res);
   }
 };
@@ -100,8 +103,8 @@ const updateProfile = async (req, res) => {
   try {
     const currUser = await models.usersprofile.findOne({
       where: {
-        userId: req?.user?.id
-      }
+        userId: req?.user?.id,
+      },
     });
     if (!currUser) return responses.unauthenticated(res);
     const { bio, nickname } = req?.body;
@@ -112,7 +115,7 @@ const updateProfile = async (req, res) => {
       return responses.successWithMessage("Profile updated successfully", res);
     return responses.failedWithMessage("Failed to update profile", res);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return responses.serverError(res);
   }
 };
@@ -146,16 +149,16 @@ const updatePassword = async (req, res) => {
 
 const logout = async (req, res) => {
   const token = req.user.token;
-  const result = service.logout({token})
-  if(!result) return responses.failedWithMessage("Invalidating token has failed")
+  const result = service.logout({ token });
+  if (!result)
+    return responses.failedWithMessage("Invalidating token has failed");
   return responses.successWithMessage("Logged out", res);
 };
 
 const getUserInfo = async (req, res) => {
   try {
     const currUser = await service.getUserInfo(req);
-    if (currUser)
-      return responses.success("User found", currUser, res);
+    if (currUser) return responses.success("User found", currUser, res);
     return responses.unauthenticated(res);
   } catch (err) {
     console.log(err);
@@ -163,17 +166,32 @@ const getUserInfo = async (req, res) => {
   }
 };
 
-const updatePhoto = async (req, res) => {
+const updateProfilePic = async (req, res) => {
   try {
     const currUser = await models.users.findByPk(req?.user?.id);
     if (!currUser) return responses.unauthenticated(res);
     const { profilePic } = req?.body;
-    const result = await service.updatePhoto(currUser);
-    if (result)
-      return responses.successWithMessage("Profile picture changed successfully", res);
-    return responses.failedWithMessage("Failed to change profile pic", res);
+    const result = await service.updateProfilePic(currUser, profilePic);
+    if (!result)
+      return responses.failedWithMessage("Failed to change profile pic", res);
+    return responses.successWithMessage("Profile picture changed successfully",res);
   } catch (err) {
-    console.log(err)
+    console.log(err);
+    return responses.serverError(res);
+  }
+};
+
+const updateBgPic = async (req, res) => {
+  try {
+    const currUser = await models.users.findByPk(req?.user?.id);
+    if (!currUser) return responses.unauthenticated(res);
+    const { bgPic } = req?.body;
+    const result = await service.updateBgPic(currUser, bgPic);
+    if (!result)
+      return responses.failedWithMessage("Failed to change background pic", res);
+    return responses.successWithMessage("Background picture changed successfully",res);
+  } catch (err) {
+    console.log(err);
     return responses.serverError(res);
   }
 };
@@ -187,7 +205,7 @@ const deleteUser = async (req, res) => {
       return responses.successWithMessage("User deleted successfully", res);
     return responses.failedWithMessage("Failed to delete user", res);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return responses.serverError(res);
   }
 };
@@ -201,6 +219,7 @@ module.exports = {
   updatePassword,
   logout,
   getUserInfo,
-  updatePhoto,
-  deleteUser
+  updateProfilePic,
+  updateBgPic,
+  deleteUser,
 };
