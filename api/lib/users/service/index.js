@@ -5,7 +5,7 @@ const { Sequelize } = require("../../../models");
 
 const createUser = async ({ username, email, password }) => {
   try {
-    const [user, created] = await models.users.findOrCreate({
+    const [user, userCreated] = await models.users.findOrCreate({
       where: {
         [Op.and]: [{ username }, { email }],
       },
@@ -15,7 +15,18 @@ const createUser = async ({ username, email, password }) => {
         password: authService.hashPassword(password),
       },
     });
-    if (!created) return null;
+    if (!userCreated) return null;
+    else {
+      const [userprofile, createdprofile] = await models.usersprofiles.findOrCreate({
+        where: {
+          userId: user.id
+          },
+          defaults: {
+            userId: user.id
+          }
+        })
+      if (!createdprofile) return null;  
+    }
     return user;
   } catch (e) {
     console.error(e);
@@ -50,8 +61,8 @@ const getUserInfo = async (req) => {
         id: req?.user?.id
       },
       include: [{
-        model: 'usersprofile',
-        as: 'profile'
+        model: models.usersprofiles,
+        foreignKey: 'userId'
       }]
     });
     return result;
@@ -104,7 +115,7 @@ const updateEmail = async (currUser, newEmail) => {
 
 const updateProfile = async (currUser, nickname, bio) => {
   try {
-    const newUser = models.usersprofile.update(
+    const newUser = models.usersprofiles.update(
       {
         nickname,
         bio
@@ -123,25 +134,6 @@ const updateProfile = async (currUser, nickname, bio) => {
   }
 }
 
-// const updateUser = async (currentUser, fieldName, newValue) => {
-//   try {
-//     const newUser = models.users.update(
-//       {
-//         [fieldName]: newValue,
-//       },
-//       {
-//         where: {
-//           id: currentUser.id,
-//         },
-//       }
-//     );
-//     if (newUser) return newUser;
-//     else return false;
-//   } catch (e) {
-//     console.error(e);
-//     throw new Error(e);
-//   }
-// };
 
 const updatePassword = async (currUser, newPassword) => {
   try {
@@ -200,6 +192,18 @@ const deleteUser = async (currUser) => {
   }
 };
 
+const logout = async ({token}) => {
+  [result, created] = await models.invalidTokens.findOrCreate( {
+    where:{
+      tokens: token
+    }, defaults: {
+      tokens:token
+    }
+  }) 
+  if(!created) return false;
+  return result;
+}
+
 module.exports = {
   createUser,
   signin,
@@ -209,5 +213,6 @@ module.exports = {
   updateProfile,
   updatePassword,
   updatePhoto,
-  deleteUser
+  deleteUser,
+  logout
 };

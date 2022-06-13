@@ -145,7 +145,10 @@ const updatePassword = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-
+  const token = req.user.token;
+  const result = service.logout({token})
+  if(!result) return responses.failedWithMessage("Invalidating token has failed")
+  return responses.successWithMessage("Logged out", res);
 };
 
 const getUserInfo = async (req, res) => {

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       users.belongsTo(models.roles, { foreignKey: "id"});
-      users.hasOne(models.usersprofile, { foreignKey: "userId"});
+      users.hasOne(models.usersprofiles, { foreignKey: "userId"});
       users.hasMany(models.links, { foreignKey: "userId"});
       users.hasOne(models.QRcodes, { foreignKey: "userId"});
     }
