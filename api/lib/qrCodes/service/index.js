@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const generateQr = async (text) => {
     try {
-        const rq = await qr.toDataURL(text)
+        const rq = await qr.toCanvas(text)
         if(rq) return rq
         return null
     }catch(err){

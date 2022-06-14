@@ -29,6 +29,11 @@ const isAuthenticated = async function (req, res, next) {
   }
 };
 
+const isAdmin = async function ( req, res, next) {
+  return next()
+}
+
 module.exports = {
   isAuthenticated,
+  isAdmin
 };
