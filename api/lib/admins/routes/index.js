@@ -16,7 +16,6 @@ router.patch("/linkstype", middleware.isAuthenticated, middleware.isAdmin, admin
 router.patch("/linksicon", middleware.isAuthenticated, middleware.isAdmin , adminController.editLinkIcon); // edit link icon
 router.put("/", middleware.isAuthenticated, middleware.isAdmin, adminController.editAdmin); // edit admin info
 router.get("/", middleware.isAuthenticated, middleware.isAdmin, adminController.getAdmins); // get all admins
-router.delete("/", middleware.isAuthenticated, middleware.isAdmin, adminController.deleteAdmin); // delete own admin
 router.post("/logout", middleware.isAuthenticated, middleware.isAdmin, adminController.logout ); // logout
 
 

@@ -1,6 +1,6 @@
 const authService = require("../middleware/services/auth");
 const responses = require("../helper/responses");
-const models = require("../../models")
+const models = require("../../models");
 
 const isAuthenticated = async function (req, res, next) {
   try {
@@ -11,11 +11,11 @@ const isAuthenticated = async function (req, res, next) {
       req?.headers?.Authorization?.split(" ")[1] ||
       null;
     const isInvalid = await models.invalidTokens.findOne({
-      where:{
-        tokens: token
-      }
-    })
-    if(isInvalid) return responses.failedWithMessage("Token is invalid", res);
+      where: {
+        tokens: token,
+      },
+    });
+    if (isInvalid) return responses.failedWithMessage("Token is invalid", res);
     const isVerified = await authService.verifyUser(req, res, next, token);
     console.log("isVerified", isVerified);
     if (isVerified) {
@@ -29,11 +29,31 @@ const isAuthenticated = async function (req, res, next) {
   }
 };
 
-const isAdmin = async function ( req, res, next) {
-  return next()
-}
+const isAdmin = async function (req, res, next) {
+  try { 
+    const user = await models.users.findByPk(req.user.id) 
+    if (user.roleId == 1 || user.roleId == 2) return next()
+    return responses.unauthorized(res)
+  } catch (err) {
+    console.log("Error -->", err);
+    responses.unauthenticated(res);
+  }
+};
+
+const isSuperAdmin = async function (req, res, next) {
+  try { 
+    const user = await models.users.findByPk(req.user.id) 
+    if (user.roleId == 1) return next()
+    return responses.unauthorized(res)
+  } catch (err) {
+    console.log("Error -->", err);
+    responses.unauthenticated(res);
+  }
+};
+
 
 module.exports = {
   isAuthenticated,
-  isAdmin
+  isAdmin,
+  isSuperAdmin
 };
