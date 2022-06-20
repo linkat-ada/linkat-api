@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 
 const authService = {
   signUser: (user) => {
+    console.log(process.env.SECRET_KEY);
     const token = jwt.sign(
       {
         email: user.email,
@@ -15,7 +16,7 @@ const authService = {
     );
     return token;
   },
-  verifyUser: (req, res, next,token) => {
+  verifyUser: (req, res, next, token) => {
     if (!token) return false;
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     if (decoded) {

@@ -20,12 +20,12 @@ const createUser = async ({ username, email, password }) => {
       const [userprofile, createdprofile] = await models.usersprofiles.findOrCreate({
         where: {
           userId: user.id
-          },
-          defaults: {
-            userId: user.id
-          }
-        })
-      if (!createdprofile) return null;  
+        },
+        defaults: {
+          userId: user.id
+        }
+      })
+      if (!createdprofile) return null;
     }
     return user;
   } catch (e) {
@@ -38,9 +38,12 @@ const signin = async ({ usernameOrEmail, password }) => {
   try {
     const user = await models.users.findOne({
       where: {
-        [Op.or]: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
-        deletedAt: null
-      },
+        [Op.and]: [{
+          [Op.or]: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+          deletedAt: null,
+          isActive: true
+        }]
+      }
     });
     if (user) {
       if (authService.comparePasswords(password, user.password))
@@ -211,15 +214,15 @@ const deleteUser = async (currUser) => {
   }
 };
 
-const logout = async ({token}) => {
-  [result, created] = await models.invalidTokens.findOrCreate( {
-    where:{
+const logout = async ({ token }) => {
+  [result, created] = await models.invalidTokens.findOrCreate({
+    where: {
       tokens: token
     }, defaults: {
-      tokens:token
+      tokens: token
     }
-  }) 
-  if(!created) return false;
+  })
+  if (!created) return false;
   return result;
 }
 

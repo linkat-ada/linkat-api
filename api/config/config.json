@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "DIA123sql",
+    "password": "ayash2063",
     "database": "linkatdb",
     "host": "127.0.0.1",
     "dialect": "mysql"
