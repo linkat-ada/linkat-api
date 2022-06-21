@@ -34,25 +34,6 @@ const createAdmin = async ({ username, email, password }) => {
   }
 };
 
-const deleteAdmin = async (toBeDeleted) => {
-  try {
-    const result = await models.users.update(
-      {
-        deletedAt: Sequelize.fn("now")
-      },
-      {
-        where: {
-          id: toBeDeleted.id,
-        },
-      }
-    );
-    return result;
-  } catch (err) {
-    console.log(err);
-    return responses.serverError(res);
-  }
-}
-
 const changeUserRole = async (user) => {
   try {
     const newAdmin = models.users.update(
@@ -93,8 +74,6 @@ const changeUserRole = async (user) => {
       throw new Error(e);
     }
   };
-
-
 
 module.exports = {
   createAdmin,

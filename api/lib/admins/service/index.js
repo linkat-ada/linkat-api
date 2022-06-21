@@ -98,28 +98,22 @@ const deleteLink = async (userId) => {
   }
 }
 
-const addLinkType = async (userId) => {
+const addLinkType = async (type, icon = null) => {
   try {
-    const user = await models.users.findOne({
+    const [linktype, created] = await models.linktypes.findOrCreate({
       where: {
-        id: userId,
-        deletedAt: null,
+        type
       },
-      include: [{
-        model: models.usersprofiles,
-        foreignKey: 'userId',
-      }],
-    })
-    const userLinks = await models.links.findAll({
-      where: {
-        userId,
-        deletedAt: null,
-      }
-    })
-    return { user: user, links: userLinks };
-  } catch (e) {
-    console.error(e);
-    throw new Error(e);
+      defaults: {
+        type,
+        icon
+      },
+    });
+    if (!created) return null;
+    return linktype;
+  } catch (err) {
+    console.log("Error -->", err);
+    throw new Error(err);
   }
 }
 
@@ -223,6 +217,26 @@ const getAdmins = async (userId) => {
   }
 }
 
+const toggleActivity = async (user) => {
+  try {
+    console.log("before updating: ", user.isActive);
+    const newUser = await models.users.update(
+      {
+        isActive: !user.isActive
+      },
+      {
+        where: {
+          id: user.id
+        }
+      }
+    )
+    return {result: newUser, isActive: user.isActive}
+  } catch (e) {
+    console.log(e);
+    throw new Error(e)
+  }
+}
+
 module.exports = {
   signin,
   deleteUser,
@@ -234,5 +248,6 @@ module.exports = {
   editLinkType,
   editLinkIcon,
   editAdmin,
-  getAdmins
+  getAdmins,
+  toggleActivity
 }

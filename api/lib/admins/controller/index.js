@@ -27,8 +27,6 @@ const signin = async (req, res) => {
   }
 };
 
-
-
 const getUsers = async (req, res, next) => {
   try {
     const result = await service.getUsers();
@@ -58,7 +56,7 @@ const getUser = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     const user = await models.users.findByPk(req?.params?.id);
-    if(!user) return responses.failedWithMessage("User does not exist", res)
+    if (!user) return responses.failedWithMessage("User does not exist", res)
     const result = await service.deleteUser(user);
     if (result)
       return responses.successWithMessage("User deleted successfully", res);
@@ -87,6 +85,7 @@ const deleteLink = async (req, res, next) => {
 const addLinkType = async (req, res, next) => {
   try {
     const { type, icon } = req?.body;
+    if(!type) return responses.failedWithMessage("Please specify a type", res);
     const result = await service.addLinkType(type, icon);
     if (result) {
       return responses.successWithMessage("New link type added successfully", res);
@@ -126,8 +125,18 @@ const editLinkIcon = async (req, res, next) => {
   }
 }
 
-const toggleActivity = (req, res, next) => {
-  
+const toggleActivity = async (req, res, next) => {
+  try {
+    const user = await models.users.findByPk(req?.params?.id);
+    if (!user) return responses.failedWithMessage("User does not exist", res)
+    const {result, isActive} = await service.toggleActivity(user);
+    if (result)
+      return responses.success("Toggled user activity successfully",{isActive: !isActive}, res);
+    return responses.failedWithMessage("Failed to toggle user activity", res);
+  } catch (err) {
+    console.log(err);
+    return responses.serverError(res);
+  }
 }
 
 //what can admin edit here

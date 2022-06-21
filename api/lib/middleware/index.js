@@ -19,7 +19,7 @@ const isAuthenticated = async function (req, res, next) {
     const isVerified = await authService.verifyUser(req, res, next, token);
     console.log("isVerified", isVerified);
     const user = await models.users.findByPk(req.user.id);
-    if(!user.isActive) return responses.failedWithMessage("Your account is no longer active", res)
+    if(!user.isActive) return responses.failedWithMessage("Your account is no longer active, please login again", res)
     if (isVerified) {
       return next();
     }
