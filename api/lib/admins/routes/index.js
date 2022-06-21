@@ -8,7 +8,6 @@ router.post("/signin", adminController.signin); // sign in
 router.get("/users", middleware.isAuthenticated , middleware.isAdmin , adminController.getUsers); // get all users
 router.get("/users/:id", middleware.isAuthenticated, middleware.isAdmin, adminController.getUser ); // get user info and links by id
 router.delete("/users/:id", middleware.isAuthenticated, middleware.isAdmin, adminController.deleteUser);  // delete user
-router.patch("/users/:id", middleware.isAuthenticated, middleware.isAdmin, adminController.editUser); // edit user
 router.delete("/links/:id", middleware.isAuthenticated, middleware.isAdmin, adminController.deleteLink); // delete links
 router.post("/linkstype", middleware.isAuthenticated, middleware.isAdmin, adminController.addLinkType); // add link types
 router.patch("/linkstype", middleware.isAuthenticated, middleware.isAdmin, adminController.editLinkType);  // edit link type
