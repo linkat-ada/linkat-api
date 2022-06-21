@@ -65,6 +65,7 @@ const getUser = async (userId) => {
 }
 
 const deleteUser = async (currUser) => {
+<<<<<<< HEAD
   try {
     const result = await models.users.update(
       {
@@ -222,6 +223,26 @@ const getAdmins = async (userId) => {
     throw new Error(e);
   }
 }
+=======
+    try {
+      const result = await models.users.update(
+        {
+          deletedAt: Sequelize.fn("now")
+        },
+        {
+          where: {
+            id: currUser.id,
+          },
+        }
+      );
+      return result;
+    } catch (e) {
+      console.error(e);
+      throw new Error(e);
+    }
+  };
+
+>>>>>>> aa03ddf4c693ccf240749e7d1c5647a85168f31d
 
 module.exports = {
   signin,
