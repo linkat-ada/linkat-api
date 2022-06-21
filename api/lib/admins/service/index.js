@@ -64,20 +64,24 @@ const getUser = async (userId) => {
   }
 }
 
-const deleteUser = async (user) => {
+const deleteUser = async (currUser) => {
   try {
-    const user = await models.users.update({
-      deletedAt: Sequelize.fn("now"),
-      where: {
-        id: user.id,
+    const result = await models.users.update(
+      {
+        deletedAt: Sequelize.fn("now")
+      },
+      {
+        where: {
+          id: currUser.id,
+        },
       }
-    })
-    return user;
+    );
+    return result;
   } catch (e) {
     console.error(e);
     throw new Error(e);
   }
-}
+};
 
 const deleteLink = async (userId) => {
   try {
@@ -221,10 +225,10 @@ const getAdmins = async (userId) => {
 
 module.exports = {
   signin,
+  deleteUser,
   getUsers,
   getUser,
   deleteUser,
-  editUser,
   deleteLink,
   addLinkType,
   editLinkType,

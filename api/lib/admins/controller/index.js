@@ -27,6 +27,8 @@ const signin = async (req, res) => {
   }
 };
 
+
+
 const getUsers = async (req, res, next) => {
   try {
     const result = await service.getUsers();
@@ -56,17 +58,16 @@ const getUser = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     const user = await models.users.findByPk(req?.params?.id);
-    if (!user) responses.failedWithMessage("User does not exist")
+    if(!user) return responses.failedWithMessage("User does not exist", res)
     const result = await service.deleteUser(user);
-    if (result) {
+    if (result)
       return responses.successWithMessage("User deleted successfully", res);
-    }
     return responses.failedWithMessage("Failed to delete user", res);
   } catch (err) {
     console.log(err);
     return responses.serverError(res);
   }
-}
+};
 
 const deleteLink = async (req, res, next) => {
   try {
@@ -125,6 +126,10 @@ const editLinkIcon = async (req, res, next) => {
   }
 }
 
+const toggleActivity = (req, res, next) => {
+  
+}
+
 //what can admin edit here
 const editAdmin = async (req, res, next) => {
   try {
@@ -152,16 +157,17 @@ const getAdmins = async (req, res, next) => {
   }
 }
 
+
 module.exports = {
   getUsers,
   getUser,
   signin,
   deleteUser,
-  editUser,
   deleteLink,
   addLinkType,
   editLinkType,
   editLinkIcon,
   editAdmin,
-  getAdmins
+  getAdmins,
+  toggleActivity
 };

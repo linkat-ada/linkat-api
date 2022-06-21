@@ -20,6 +20,7 @@ require("dotenv").config();
 app.get("/", (res, req) => res.send('wlecome to linkat api'));
 app.use("/api/v1", require("./routes/apiRoutesV1"));
 
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

@@ -1,6 +1,8 @@
 const responses = require("../../helper/responses");
 const service = require("../service");
 const models = require("../../../models");
+const { Op } = require("sequelize");
+
 
 const signup = async (req, res, next) => {
   try {
@@ -33,14 +35,16 @@ const signup = async (req, res, next) => {
     return;
   }
 };
-
 const deleteAdmin = async (req, res, next) => {
   try {
-    const currAdmin = await models.users.findByPk(req?.user?.id);
-    if (!currAdmin) return responses.unauthenticated(res);
-    const toBeDeleted = await models.users.findByPk(req?.params?.id);
-    if (!toBeDeleted) return res.failedWithMessage("Admin to be deleted not found.", res);
-    const result = await service.deleteAdmin(toBeDeleted);
+    const admin = await models.users.findOne({
+      where: {
+        [Op.and]: [{ id: req?.params?.id}, { deletedAt: { [Op.eq]: null } }]
+      },
+    });
+    if (!admin)
+      return responses.failedWithMessage("Admin does not exist", res);
+    const result = await service.deleteAdmin(admin);
     if (result)
       return responses.successWithMessage("Admin deleted successfully", res);
     return responses.failedWithMessage("Failed to delete admin", res);

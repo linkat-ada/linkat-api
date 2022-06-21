@@ -7,7 +7,7 @@ const createUser = async ({ username, email, password }) => {
   try {
     const [user, userCreated] = await models.users.findOrCreate({
       where: {
-        [Op.and]: [{ username }, { email }],
+        [Op.or]: [{ username }, { email }],
       },
       defaults: {
         username,
@@ -15,7 +15,9 @@ const createUser = async ({ username, email, password }) => {
         password: authService.hashPassword(password),
       },
     });
-    if (!userCreated) return null;
+    if (!userCreated) {
+      return null;
+    }
     else {
       const [userprofile, createdprofile] = await models.usersprofiles.findOrCreate({
         where: {
@@ -28,9 +30,9 @@ const createUser = async ({ username, email, password }) => {
       if (!createdprofile) return null;
     }
     return user;
-  } catch (e) {
-    console.error(e);
-    throw new Error(e);
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
   }
 };
 
