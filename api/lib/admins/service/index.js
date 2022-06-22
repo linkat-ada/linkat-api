@@ -7,12 +7,12 @@ const signin = async ({ usernameOrEmail, password }) => {
   try {
     const admin = await models.users.findOne({
       where: {
-        [Op.and]: [{
-          [Op.or]: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
-          deletedAt: null,
-          isActive: true,
-          [Op.or]: [{ roleId: 1 }, { roleId: 2 }]
-        }]
+        [Op.and]: [
+          { [Op.or]: [{ username: usernameOrEmail }, { email: usernameOrEmail }] },
+          { deletedAt: null },
+          { isActive: true },
+          { [Op.or]: [{ roleId: 1 }, { roleId: 2 }] }
+        ]
       }
     });
     if (admin && authService.comparePasswords(password, admin.password))
@@ -64,7 +64,7 @@ const getUser = async (userId) => {
   }
 }
 
-const deleteUser = async (currUser) => {
+const deleteUser = async (user) => {
   try {
     const result = await models.users.update(
       {
@@ -72,7 +72,7 @@ const deleteUser = async (currUser) => {
       },
       {
         where: {
-          id: currUser.id,
+          id: user.id,
         },
       }
     );
@@ -117,100 +117,57 @@ const addLinkType = async (type, icon = null) => {
   }
 }
 
-const editLinkType = async (userId) => {
+const editLinkType = async (linktype, type) => {
   try {
-    const user = await models.users.findOne({
-      where: {
-        id: userId,
-        deletedAt: null,
+    const newLinktype = await models.linktypes.update(
+      {
+        type
       },
-      include: [{
-        model: models.usersprofiles,
-        foreignKey: 'userId',
-      }],
-    })
-    const userLinks = await models.links.findAll({
-      where: {
-        userId,
-        deletedAt: null,
+      {
+        where: {
+          id: linktype.id
+        }
       }
-    })
-    return { user: user, links: userLinks };
+    )
+    return newLinktype;
   } catch (e) {
     console.error(e);
     throw new Error(e);
   }
 }
 
-const editLinkIcon = async (userId) => {
+const editLinkIcon = async (linktype, icon) => {
   try {
-    const user = await models.users.findOne({
-      where: {
-        id: userId,
-        deletedAt: null,
+    const newLinktype = await models.linktypes.update(
+      {
+        icon
       },
-      include: [{
-        model: models.usersprofiles,
-        foreignKey: 'userId',
-      }],
-    })
-    const userLinks = await models.links.findAll({
-      where: {
-        userId,
-        deletedAt: null,
+      {
+        where: {
+          id: linktype.id
+        }
       }
-    })
-    return { user: user, links: userLinks };
+    )
+    return newLinktype;
   } catch (e) {
     console.error(e);
     throw new Error(e);
   }
 }
 
-const editAdmin = async (userId) => {
-  try {
-    const user = await models.users.findOne({
-      where: {
-        id: userId,
-        deletedAt: null,
-      },
-      include: [{
-        model: models.usersprofiles,
-        foreignKey: 'userId',
-      }],
-    })
-    const userLinks = await models.links.findAll({
-      where: {
-        userId,
-        deletedAt: null,
-      }
-    })
-    return { user: user, links: userLinks };
-  } catch (e) {
-    console.error(e);
-    throw new Error(e);
-  }
-}
+// const editAdmin = async (userId) => {
+// }
 
-const getAdmins = async (userId) => {
+const getAdmins = async () => {
   try {
-    const user = await models.users.findOne({
+    const admins = await models.users.findAll({
       where: {
-        id: userId,
-        deletedAt: null,
+        [Op.or]: [{ roleId: 1 }, { roleId: 2 }]
       },
-      include: [{
-        model: models.usersprofiles,
-        foreignKey: 'userId',
-      }],
+      attributes: ["username", "email", "roleId", "isActive"]
     })
-    const userLinks = await models.links.findAll({
-      where: {
-        userId,
-        deletedAt: null,
-      }
-    })
-    return { user: user, links: userLinks };
+    if(!admins) return null;
+    return admins;
   } catch (e) {
     console.error(e);
     throw new Error(e);
@@ -230,7 +187,7 @@ const toggleActivity = async (user) => {
         }
       }
     )
-    return {result: newUser, isActive: user.isActive}
+    return { result: newUser, isActive: user.isActive }
   } catch (e) {
     console.log(e);
     throw new Error(e)
@@ -247,7 +204,6 @@ module.exports = {
   addLinkType,
   editLinkType,
   editLinkIcon,
-  editAdmin,
   getAdmins,
   toggleActivity
 }

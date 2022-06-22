@@ -13,7 +13,8 @@ router.delete("/links/:id", middleware.isAuthenticated, middleware.isAdmin, admi
 router.post("/linkstype", middleware.isAuthenticated, middleware.isAdmin, adminController.addLinkType); // add link types
 router.patch("/linkstype/:id", middleware.isAuthenticated, middleware.isAdmin, adminController.editLinkType);  // edit link type
 router.patch("/linksicon/:id", middleware.isAuthenticated, middleware.isAdmin , adminController.editLinkIcon); // edit link icon
-router.put("/", middleware.isAuthenticated, middleware.isAdmin, adminController.editAdmin); // edit admin info
+// router.put("/", middleware.isAuthenticated, middleware.isAdmin, adminController.editAdmin);
+// edit admin info
 router.get("/", middleware.isAuthenticated, middleware.isAdmin, adminController.getAdmins); // get all admins
 router.post("/logout", middleware.isAuthenticated, userController.logout ); // logout
 

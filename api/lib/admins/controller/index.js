@@ -100,9 +100,18 @@ const addLinkType = async (req, res, next) => {
 //only link type name
 const editLinkType = async (req, res, next) => {
   try {
-    const result = await service.editLinkType(req?.params?.id);
+    const type = req?.body?.type;
+    if(!type) return responses.failedWithMessage("Please enter the type name", res);
+    const linktype = await models.linktypes.findOne({
+      where: {
+        id: req?.params?.id,
+        deletedAt: null
+      }
+    })
+    if(!linktype) responses.failedWithMessage("Link type does not exist", res);
+    const result = await service.editLinkType(linktype, type);
     if (result) {
-      return responses.successWithMessage("Link type edited successfully", res);
+      return responses.success("Link type edited successfully", result, res);
     }
     return responses.failedWithMessage("Failed to edit link type", res);
   } catch (err) {
@@ -114,9 +123,18 @@ const editLinkType = async (req, res, next) => {
 //only link type icon
 const editLinkIcon = async (req, res, next) => {
   try {
-    const result = await service.editLinkIcon(req?.params?.id);
+    const icon = req?.body?.icon;
+    if(!icon) responses.failedWithMessage("Please enter an icon", res);
+    const linktype = await models.linktypes.findOne({
+      where: {
+        id: req?.params?.id,
+        deletedAt: null
+      }
+    })
+    if(!linktype) responses.failedWithMessage("Linktype does not exist", res);
+    const result = await service.editLinkIcon(linktype, icon);
     if (result) {
-      return responses.successWithMessage("Link icon edited successfully", res);
+      return responses.success("Link icon edited successfully", result, res);
     }
     return responses.failedWithMessage("Failed to edit link icon", res);
   } catch (err) {
@@ -140,24 +158,24 @@ const toggleActivity = async (req, res, next) => {
 }
 
 //what can admin edit here
-const editAdmin = async (req, res, next) => {
-  try {
-    const result = await service.editAdmin(req?.params?.id);
-    if (result) {
-      return responses.successWithMessage("Users received successfully", res);
-    }
-    return responses.failedWithMessage("Failed to get users", res);
-  } catch (err) {
-    console.log(err);
-    return responses.serverError(res);
-  }
-}
+// const editAdmin = async (req, res, next) => {
+//   try {
+//     const result = await service.editAdmin(req?.params?.id);
+//     if (result) {
+//       return responses.successWithMessage("Users received successfully", res);
+//     }
+//     return responses.failedWithMessage("Failed to get users", res);
+//   } catch (err) {
+//     console.log(err);
+//     return responses.serverError(res);
+//   }
+// }
 
 const getAdmins = async (req, res, next) => {
   try {
     const result = await service.getAdmins();
     if (result) {
-      return responses.successWithMessage("Admins received successfully", res);
+      return responses.success("Admins received successfully", result, res);
     }
     return responses.failedWithMessage("Failed to get admins", res);
   } catch (err) {
@@ -176,7 +194,6 @@ module.exports = {
   addLinkType,
   editLinkType,
   editLinkIcon,
-  editAdmin,
   getAdmins,
   toggleActivity
 };
