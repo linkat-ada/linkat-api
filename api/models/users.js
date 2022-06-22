@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       users.belongsTo(models.roles, { foreignKey: "id"});
       users.hasOne(models.usersprofiles, { foreignKey: "userId"});
       users.hasMany(models.links, { foreignKey: "userId"});
-      users.hasOne(models.QRcodes, { foreignKey: "userId"});
+      users.hasOne(models.qrcodes, { foreignKey: "userId"});
     }
   }
   users.init({

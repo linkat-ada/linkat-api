@@ -3,7 +3,8 @@ const router = express.Router()
 const middleware = require("../../middleware")
 const controller = require("../controller")
 
-router.post("/", middleware.isAuthenticated, controller.createQr)
+router.get("/", middleware.isAuthenticated, controller.getQR)
+router.post("/", middleware.isAuthenticated, controller.scanQR)
 
 
 

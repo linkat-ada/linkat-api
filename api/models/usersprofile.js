@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class qrcodes extends Model {
+  class usersprofiles extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,16 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      qrcodes.belongsTo(models.users, { foreignKey: "id"});
+      usersprofiles.belongsTo(models.users, { foreignKey: "id"});
     }
   }
-  qrcodes.init({
+  usersprofiles.init({
     userId: DataTypes.INTEGER,
-    QRlink: DataTypes.STRING,
-    uuid: DataTypes.STRING
+    nickname: DataTypes.STRING,
+    profilePic: DataTypes.STRING,
+    bgPic: DataTypes.STRING,
+    bio: DataTypes.STRING,
+    darkMode: DataTypes.BOOLEAN
   }, {
     sequelize,
-    modelName: 'qrcodes',
+    modelName: 'usersprofiles',
   });
-  return qrcodes;
+  return usersprofiles;
 };

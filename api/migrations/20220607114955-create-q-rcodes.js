@@ -19,9 +19,8 @@ module.exports = {
         },
       },
       QRlink: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
-        unique: true
       },
       uuid: {
         type: Sequelize.STRING,

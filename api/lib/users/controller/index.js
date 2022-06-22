@@ -47,7 +47,7 @@ const signin = async (req, res) => {
     const result = await service.signin({ usernameOrEmail, password });
     if (result) {
       return responses.success(
-        "Logged in successfully",
+        "successfully logged in",
         { user: transformer.userTransformer(result.user), token: result.token },
         res
       );
