@@ -1,0 +1,46 @@
+const app = require("../config");
+const { getStorage } = require("firebase/storage");
+const storage = getStorage(app);
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+const response = require("../../helper/responses");
+
+const uplaod = async (newFile, file) => {
+  try {
+    if (file) {
+      const uniqueFileName = `images/${
+        file?.originalname?.split(".")[0]
+      }%%${new Date().valueOf()}.${file?.originalname?.split(".")[1]}`;
+      const imageRef = ref(storage, uniqueFileName);
+      const metaType = {
+        contentType: file?.mimetype,
+        name: file?.originalname,
+      };
+      await uploadBytes(imageRef, file?.buffer, metaType)
+        .then(async () => {
+          let publicUrl = await getDownloadURL(imageRef);
+          let result = await service.addImage(publicUrl, userId);
+          if (result?.code === 0) {
+            return response.success(publicUrl, res);
+          } else if (result?.code === 1) {
+            return response.failedWithMessage(result?.data, res);
+          } else {
+            return response.notAcceptable(res);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+          return response.failedWithMessage(e.message, res);
+        });
+    }
+    return null;
+  } catch (err) {
+    console.log("ERROR---->", err);
+    throw new Error();
+  }
+};
+
+
+
+module.exports = {
+  uplaod,
+};
