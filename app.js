@@ -5,6 +5,8 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
 var app = express();
+const cors = require('cors')
+
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -16,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 require("dotenv").config();
-
+app.use(cors())
 app.get("/", (res, req) => res.send('wlecome to linkat api'));
 app.use("/api/v1", require("./routes/apiRoutesV1"));
 

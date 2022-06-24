@@ -6,7 +6,7 @@ router.use("/links", require("../lib/links/routes"));
 router.use("/qrcodes", require("../lib/qrcodes/routes"));
 router.use("/admins", require("../lib/admins/routes"));
 router.use("/superadmin", require("../lib/superAdmins/routes"));
-router.use("/subscribe ", require("../lib/subscribes/routers"));
+router.use("/subscribers", require("../lib/subscribers/routers"));
 
 
 module.exports = router;
