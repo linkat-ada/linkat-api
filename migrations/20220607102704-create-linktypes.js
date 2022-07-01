@@ -15,7 +15,8 @@ module.exports = {
       },
       icon: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: "https://firebasestorage.googleapis.com/v0/b/linkat-a9527.appspot.com/o/images%2Fmain-image%2Flinkat-04.svg?alt=media&token=db25bbaf-c238-4900-a1e4-daf02598ac6b"
       },
       createdAt: {
         allowNull: false,

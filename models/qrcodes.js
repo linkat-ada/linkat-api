@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   qrcodes.init({
     userId: DataTypes.INTEGER,
-    QRlink: DataTypes.STRING,
+    QRlink: DataTypes.TEXT,
     uuid: DataTypes.STRING
   }, {
     sequelize,
