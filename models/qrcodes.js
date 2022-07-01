@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      qrcodes.belongsTo(models.users, { foreignKey: "id"});
+      qrcodes.belongsTo(models.users);
     }
   }
   qrcodes.init({
