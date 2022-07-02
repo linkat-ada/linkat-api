@@ -11,13 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       qrlinks.belongsToMany(models.qrcodes, {
         through: qrlinks,
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        foreignKey: 'id',
       });
       qrlinks.belongsToMany(models.links, {
         through: qrlinks,
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
+        foreignKey: 'id',
       });
     }
   }
