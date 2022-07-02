@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       links.belongsTo(models.users);
       links.belongsTo(models.linktypes);
+      links.belongsToMany(models.qrcodes, {
+        through: "qrlinks",
+        foreignKey: "linkId"
+      })
     }
   }
   links.init({

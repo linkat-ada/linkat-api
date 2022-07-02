@@ -9,14 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      qrlinks.belongsToMany(models.qrcodes, {
-        through: qrlinks,
-        foreignKey: 'id',
-      });
-      qrlinks.belongsToMany(models.links, {
-        through: qrlinks,
-        foreignKey: 'id',
-      });
     }
   }
   qrlinks.init(
