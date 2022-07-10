@@ -12,7 +12,7 @@ const linkTransformer = (link) => {
   delete link["dataValues"]["updatedAt"];
   return link;
 };
-const linksTransformer = (links) => {
+const linksTransformers = (links) => {
   links.map((link) => {
     delete link["dataValues"]["qrlinks"];
     delete link["dataValues"]["userId"];
@@ -27,8 +27,10 @@ const linksTransformer = (links) => {
   return links;
 };
 
+
+
 module.exports = {
   userTransformer,
   linkTransformer,
-  linksTransformer,
+  linksTransformers,
 };
