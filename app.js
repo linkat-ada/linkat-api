@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+require("dotenv").config();
 
 var app = express();
 const cors = require('cors')
@@ -17,7 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-require("dotenv").config();
 app.use(cors())
 app.get("/", (res, req) => res.send('wlecome to linkat api'));
 app.use("/api/v1", require("./routes/apiRoutesV1"));
