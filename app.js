@@ -19,7 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors())
-app.get("/", (res, req) => res.send('wlecome to linkat api'));
+app.get("/", (req, res) => {
+  let welcomeHTML = `<h1>Welcome to the todo api</h1> <a target="_blank"  href="https://documenter.getpostman.com/view/7504301/UyxqAhrr#intro">Click here for the API Documentation</a>`;
+  res.send(welcomeHTML);
+});
 app.use("/api/v1", require("./routes/apiRoutesV1"));
 
 // catch 404 and forward to error handler
